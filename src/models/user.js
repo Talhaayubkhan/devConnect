@@ -1,0 +1,64 @@
+const mongoose = require("mongoose");
+
+const userSchema = mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      minlength: 4,
+      maxlength: 50,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      minlength: 4,
+      maxlength: 45,
+    },
+    emailId: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+      validate: {
+        validator: (value) => {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(value);
+        },
+      },
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+      maxlength: 1024,
+    },
+    age: {
+      type: Number,
+      min: 0,
+    },
+    gender: {
+      type: String,
+      validate(value) {
+        if (!["male", "female", "transgender", "others"].includes(value)) {
+          throw new Error("Gender data is not valid");
+        }
+      },
+    },
+    about: {
+      type: String,
+      default: "this is software developer from pakistan!",
+    },
+    photoURL: {
+      type: String,
+      default:
+        "https://img.freepik.com/free-vector/isolated-young-handsome-man-set-different-poses-white-background-illustration_632498-649.jpg?w=360",
+    },
+    skills: {
+      type: [String],
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = mongoose.model("User", userSchema);
