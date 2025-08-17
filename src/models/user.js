@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validate = require("validator");
 
 const userSchema = mongoose.Schema(
   {
@@ -18,11 +19,10 @@ const userSchema = mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
-      validate: {
-        validator: (value) => {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          return emailRegex.test(value);
-        },
+      validate(value) {
+        if (!validate.isEmail(value)) {
+          throw new Error("Email is not valid");
+        }
       },
     },
     password: {
@@ -51,6 +51,11 @@ const userSchema = mongoose.Schema(
       type: String,
       default:
         "https://img.freepik.com/free-vector/isolated-young-handsome-man-set-different-poses-white-background-illustration_632498-649.jpg?w=360",
+      validate(value) {
+        if (!validate.isURL(value)) {
+          throw new Error("Photo URL is not valid");
+        }
+      },
     },
     skills: {
       type: [String],
