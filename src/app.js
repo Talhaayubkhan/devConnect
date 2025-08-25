@@ -2,21 +2,30 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const User = require("./models/user");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { adminAuth, userAuth } = require("./middleware/auth");
 const connectDB = require("./db/database");
+const { validateSignUpData } = require("./utils/validation");
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
-  // console.log(req.body);
   try {
-    const data = req.body;
-    if (!data) {
-      throw new Error("Please Provide User Data!");
-    }
-    const user = User(data);
-    if (!user) {
-      throw new Error("User Data is not valid!");
-    }
+    // validate the data
+    validateSignUpData(req);
+    const { firstName, lastName, emailId, password } = req.body;
+
+    const passwordHashed = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHashed,
+    });
 
     await user.save();
 
@@ -26,8 +35,64 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.patch("/profile", async (req, res) => {
+app.post("/login", userAuth, async (req, res) => {
+  try {
+    // first we check the email and password
+
+    const { emailId, password } = req.body;
+
+    // check if email exist
+    const isUserExist = await User.findOne({ emailId });
+    if (!isUserExist) {
+      throw new Error(400).send("invalid crediontial, please sign up!");
+    }
+
+    // now compare the password
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      isUserExist.password
+    );
+
+    if (isPasswordCorrect) {
+      // if password is correct, now create JWT!
+      const token = jwt.sign({ _id: isUserExist._id }, "KHAN@2002");
+
+      // now we attach this token with cookie
+      res.cookie("token", token);
+
+      res.send("Login Success!");
+    } else {
+      throw new Error("Invalid Credentiols");
+    }
+  } catch (error) {
+    return res.status(400).send("ERROR: " + error);
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  try {
+    // extract the token
+    const { token } = req.cookies;
+    // console.log(token);
+
+    // now verify the token
+    const { _id } = await jwt.verify(token, "KHAN@2002");
+
+    // find the user with this id
+
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("User not found..");
+    }
+    res.send(user);
+  } catch (error) {
+    res.status(400).send("ERROR: " + error.message);
+  }
+});
+
+app.patch("/profile/:userId", async (req, res) => {
   const userId = req.body.userId;
+
   const data = Object.keys(req.body);
 
   try {
