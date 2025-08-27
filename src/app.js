@@ -4,7 +4,7 @@ const app = express();
 const User = require("./models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { adminAuth, userAuth } = require("./middleware/auth");
+const { userAuth } = require("./middleware/auth");
 const connectDB = require("./db/database");
 const { validateSignUpData } = require("./utils/validation");
 const cookieParser = require("cookie-parser");
@@ -35,27 +35,24 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/login", userAuth, async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     // first we check the email and password
 
     const { emailId, password } = req.body;
 
     // check if email exist
-    const isUserExist = await User.findOne({ emailId });
-    if (!isUserExist) {
+    const user = await User.findOne({ emailId });
+    if (!user) {
       throw new Error(400).send("invalid crediontial, please sign up!");
     }
 
     // now compare the password
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      isUserExist.password
-    );
+    const isPasswordCorrect = await user.isPasswordValid(password);
 
     if (isPasswordCorrect) {
       // if password is correct, now create JWT!
-      const token = jwt.sign({ _id: isUserExist._id }, "KHAN@2002");
+      const token = await user.getJWTAuthToken();
 
       // now we attach this token with cookie
       res.cookie("token", token);
@@ -69,25 +66,18 @@ app.post("/login", userAuth, async (req, res) => {
   }
 });
 
-app.get("/profile", async (req, res) => {
-  try {
-    // extract the token
-    const { token } = req.cookies;
-    // console.log(token);
+app.get("/profile", userAuth, (req, res) => {
+  const user = req.user;
+  console.log(user);
 
-    // now verify the token
-    const { _id } = await jwt.verify(token, "KHAN@2002");
+  res.send(user);
+});
 
-    // find the user with this id
+app.get("/sendConnectionRequest", userAuth, (req, res) => {
+  const user = req.user;
+  console.log("Connection Request Send!");
 
-    const user = await User.findById(_id);
-    if (!user) {
-      throw new Error("User not found..");
-    }
-    res.send(user);
-  } catch (error) {
-    res.status(400).send("ERROR: " + error.message);
-  }
+  res.send(`${user.firstName} ${user.lastName} has send the request....`);
 });
 
 app.patch("/profile/:userId", async (req, res) => {
