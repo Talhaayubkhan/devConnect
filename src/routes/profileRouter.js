@@ -44,7 +44,6 @@ profileRouter.patch("/profile/editPassword", userAuth, async (req, res) => {
     const { emailId, password, newPassword } = req.body;
 
     // first we find the user exist
-
     const isUserExist = await User.findOne({ emailId });
     if (!isUserExist) {
       throw new Error("User does not exist, please sign up!");
@@ -59,7 +58,7 @@ profileRouter.patch("/profile/editPassword", userAuth, async (req, res) => {
 
     // 3. Check if new password is same as old password
     const isSamePassword = await isUserExist.isPasswordValid(newPassword);
-    if (!isSamePassword) {
+    if (isSamePassword) {
       throw new Error(
         "New password must be different from the current password"
       );
