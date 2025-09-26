@@ -65,6 +65,7 @@ requestRouter.post(
   }
 );
 
+// accepting the request
 requestRouter.post(
   "/request/review/:status/:requestId",
   userAuth,
