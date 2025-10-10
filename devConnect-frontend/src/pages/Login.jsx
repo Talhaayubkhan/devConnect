@@ -143,14 +143,19 @@ import { MdLockOutline } from "react-icons/md";
 import { useFormik } from "formik";
 import axios from "axios";
 import { emailRegex, strongPasswordRegex } from "../utils/config";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux-toolkit/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(false);
 
   const formik = useFormik({
     initialValues: {
-      emailId: "talha@gmail.com",
-      password: "Talha@2003",
+      emailId: "",
+      password: "",
     },
     validate: (values) => {
       const errors = {};
@@ -178,9 +183,11 @@ const Login = () => {
         const res = await axios.post("http://localhost:4000/login", values, {
           withCredentials: true,
         });
-        console.log(res);
+        // console.log(res.data);
+        dispatch(addUser(res.data));
+        return navigate("/feed");
       } catch (error) {
-        console.error("Error:", error.message);
+        console.error("Error:", error?.message);
       } finally {
         setIsLoading(false);
       }
