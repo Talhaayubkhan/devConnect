@@ -2,12 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const user = useSelector((store) => store.user.data);
-  const { firstName, photoURL } = user;
-  // console.log(user);
-
-  if (!user) return;
-
+  const user = useSelector((store) => store?.user?.data);
   return (
     <div>
       {" "}
@@ -16,7 +11,7 @@ const Navbar = () => {
           <a className="btn btn-ghost text-xl">DevConnect 🧑‍💻 </a>
         </div>
         <div className="flex gap-2 mx-3 justify-center items-center">
-          <p className="text-md text-white">Welcome Here, {firstName}</p>
+          <p className="text-md text-white">Welcome Here, {user?.firstName}</p>
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -24,7 +19,7 @@ const Navbar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img alt="talha-ayub" src={photoURL} />
+                <img alt="talha-ayub" src={user?.photoURL} />
               </div>
             </div>
             <ul

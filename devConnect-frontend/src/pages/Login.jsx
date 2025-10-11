@@ -142,10 +142,12 @@ import { HiMail } from "react-icons/hi";
 import { MdLockOutline } from "react-icons/md";
 import { useFormik } from "formik";
 import axios from "axios";
-import { emailRegex, strongPasswordRegex } from "../utils/config";
+import { emailRegex, strongPasswordRegex } from "../constants/regex";
 import { useDispatch } from "react-redux";
 import { addUser } from "../redux-toolkit/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../config/config";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -160,14 +162,12 @@ const Login = () => {
     validate: (values) => {
       const errors = {};
 
-      // ✅ Email validation
       if (!values.emailId) {
         errors.emailId = "Email is required!";
       } else if (!emailRegex.test(values.emailId)) {
         errors.emailId = "Invalid email address!";
       }
 
-      // ✅ Password validation
       if (!values.password) {
         errors.password = "Password is required!";
       } else if (!strongPasswordRegex.test(values.password)) {
@@ -180,14 +180,25 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
-        const res = await axios.post("http://localhost:4000/login", values, {
+        const res = await axios.post(`${BASE_URL}/login`, values, {
           withCredentials: true,
         });
-        // console.log(res.data);
+        // If login successful:
         dispatch(addUser(res.data));
-        return navigate("/feed");
+        toast.success("Login successful!", { autoClose: 2000 });
+
+        // Small delay before navigating (so user sees toast)
+        setTimeout(() => navigate("/feed"), 1500);
       } catch (error) {
-        console.error("Error:", error?.message);
+        if (error?.response?.status == 401) {
+          toast.error("Invalid credentials");
+        } else if (error?.response?.status == 404) {
+          toast.info("No account found, please sign up");
+        } else if (error?.response?.status === 500) {
+          toast.error("Server error, please try again later");
+        } else {
+          toast.error("Something went wrong");
+        }
       } finally {
         setIsLoading(false);
       }
