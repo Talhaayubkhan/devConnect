@@ -183,8 +183,10 @@ const Login = () => {
         const res = await axios.post(`${BASE_URL}/login`, values, {
           withCredentials: true,
         });
+        // console.log(res.data);
+
         // If login successful:
-        dispatch(addUser(res.data));
+        dispatch(addUser(res.data.data));
         toast.success("Login successful!", { autoClose: 2000 });
 
         // Small delay before navigating (so user sees toast)
@@ -257,15 +259,6 @@ const Login = () => {
                 </div>
               )}
             </label>
-
-            <div className="text-right">
-              <a
-                href="#"
-                className="text-sm text-indigo-500 hover:underline hover:text-indigo-600"
-              >
-                Forgot password?
-              </a>
-            </div>
 
             {/* Submit Button */}
             <button

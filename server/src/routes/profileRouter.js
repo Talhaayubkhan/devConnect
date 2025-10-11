@@ -7,10 +7,19 @@ const { userAuth } = require("../middleware/auth");
 const { validateProfileEditData } = require("../utils/validation");
 
 profileRouter.get("/profile", userAuth, (req, res) => {
-  const user = req.user;
-  // console.log(user);
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  res.send(user);
+    res.status(200).json({
+      message: "User profile fetched successfully",
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {

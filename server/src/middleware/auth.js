@@ -2,26 +2,23 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 const userAuth = async (req, res, next) => {
+  const { token } = req.cookies;
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  }
+
   try {
-    // extract the token
-    const { token } = req.cookies;
-    if (!token) {
-      throw new Error("Token Not Valid, try again!");
-    }
-    // then verify it via jwt
-    const { _id } = await jwt.verify(token, "KHAN@2002");
-
-    // find the user via this id
+    const { _id } = jwt.verify(token, "KHAN@2002");
     const user = await User.findById(_id);
+
     if (!user) {
-      throw new Error(`User not found with this ${_id}, try again`);
+      return res.status(401).json({ message: "Unauthorized: User not found" });
     }
 
-    // attach this user with req;
     req.user = user;
     next();
   } catch (error) {
-    return res.status(400).send("ERROR " + error.message);
+    return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
 

@@ -8,6 +8,7 @@ import store from "./redux-toolkit/store";
 import Feed from "./pages/Feed";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Error from "./pages/Error";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route element={<AuthLayout />}>
             <Route path="login" element={<Login />} />
           </Route>
+          <Route path="*" element={<Error />} />
         </Routes>
         <ToastContainer
           position="top-center"

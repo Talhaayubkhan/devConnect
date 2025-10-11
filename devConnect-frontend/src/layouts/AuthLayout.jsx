@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
-  const isUserAllowed = useSelector((store) => store.user);
-  console.log(isUserAllowed);
+  const isUser = useSelector((state) => state?.user);
+
+  if (isUser) return <Navigate to="/feed" />;
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-cyan-400">
