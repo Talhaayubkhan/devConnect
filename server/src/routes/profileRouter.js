@@ -24,26 +24,65 @@ profileRouter.get("/profile", userAuth, (req, res) => {
 
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
-    // 1. Validate request
-
+    // 1️⃣ Validate Request Fields
     if (!validateProfileEditData(req)) {
-      throw new Error("Invalid Edit Req, Try Again!");
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid fields detected. Only editable fields can be updated.",
+      });
     }
 
-    // 2. Find logged-in user
+    // 2️⃣ Check if body is empty
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No data provided for update.",
+      });
+    }
+
+    // 3️⃣ Get Logged-in User from Middleware
     const loggedInUser = req.user;
 
-    // 3. Update fields dynamically
-    Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
-    // 4. Save updates
+    if (!loggedInUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found. Please re-login.",
+      });
+    }
+
+    // 4️⃣ Apply Updates Dynamically
+    Object.keys(req.body).forEach((key) => {
+      loggedInUser[key] = req.body[key];
+    });
+
+    // 5️⃣ Save Changes
     await loggedInUser.save();
 
+    // 6️⃣ Return Success Response
     res.status(200).json({
-      message: `${loggedInUser?.firstName} Profile updated successfully!`,
-      data: loggedInUser,
+      success: true,
+      message: `${
+        loggedInUser.firstName || "User"
+      }'s profile updated successfully.`,
+      user: {
+        id: loggedInUser._id,
+        firstName: loggedInUser.firstName,
+        lastName: loggedInUser.lastName,
+        age: loggedInUser.age,
+        photoURL: loggedInUser.photoURL,
+        about: loggedInUser.about,
+        gender: loggedInUser.gender,
+        skills: loggedInUser.skills,
+      },
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error in /profile/edit:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+      error: error.message,
+    });
   }
 });
 

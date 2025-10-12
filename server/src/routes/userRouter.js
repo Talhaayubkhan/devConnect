@@ -112,8 +112,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       data: users,
     });
   } catch (error) {
-    // If something goes wrong, send error
-    res.status(400).send("ERROR: ", error.message);
+    res.status(400).send("ERROR: " + error.message);
   }
 });
 

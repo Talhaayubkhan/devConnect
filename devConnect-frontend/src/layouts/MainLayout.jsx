@@ -8,9 +8,11 @@ const MainLayout = () => {
   if (loading) return <div> Loading... </div>;
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen bg-slate-900">
       <Navbar />
-      <Outlet />
+      <main className="flex-grow">
+        <Outlet /> {/* Feed or other content */}
+      </main>
       <Footer />
     </div>
   );
