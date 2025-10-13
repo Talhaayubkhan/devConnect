@@ -178,8 +178,9 @@ const EditProfile = ({ user }) => {
         </div>
 
         {/* 👤 Right: Live User Preview */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex justify-center w-92">
           <UserCard
+            variant="profile"
             user={{
               firstName,
               lastName,

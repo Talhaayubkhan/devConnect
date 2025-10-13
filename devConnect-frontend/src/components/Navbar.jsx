@@ -10,12 +10,10 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((store) => store?.user);
-  console.log(user);
 
   const handleLogout = async () => {
     try {
       await axios.post(`${BASE_URL}/logout`, {}, { withCredentials: true });
-
       toast.success("Logged out successfully");
       dispatch(removeUser());
       return navigate("/login");
@@ -25,7 +23,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar bg-base-200/80 backdrop-blur-md shadow-md border-b border-slate-700/30 px-4">
+    <nav className="navbar bg-base-200/80 backdrop-blur-md shadow-md border-b border-slate-700/30 px-4 sticky top-0 z-[100]">
       {/* Left Section */}
       <div className="flex-1">
         <Link
@@ -37,7 +35,7 @@ const Navbar = () => {
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         {user?.firstName && (
           <p className="hidden sm:block text-sm text-slate-300">
             Welcome,{" "}
@@ -46,7 +44,7 @@ const Navbar = () => {
         )}
 
         {/* Dropdown */}
-        <div className="dropdown dropdown-end">
+        <div className="dropdown dropdown-end relative">
           <div
             tabIndex={0}
             role="button"
@@ -63,7 +61,7 @@ const Navbar = () => {
 
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-xl z-[1] mt-3 w-52 p-2 shadow-lg border border-slate-700/20"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-xl mt-3 w-52 p-2 shadow-lg border border-slate-700/20 z-[200]"
           >
             <li>
               <Link to="/profile" className="flex justify-between">
@@ -72,7 +70,10 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/settings">Settings</Link>
+              <Link to="/connections">Connections</Link>
+            </li>
+            <li>
+              <Link to="/requests">Requests</Link>
             </li>
             <li>
               <button

@@ -17,16 +17,12 @@ userRouter.get("/user/request/received", userAuth, async (req, res) => {
       status: "interested",
     }).populate("fromUserId", USER_DATA); // show details of the sender
 
-    if (!findConnectionRequests || findConnectionRequests.length === 0) {
-      return res.status(404).json({ message: "No Pending Requests Found" });
-    }
-
     res.status(200).json({
       message: "Pending requests fetched successfully",
       data: findConnectionRequests,
     });
   } catch (error) {
-    return res.status(400).send("ERROR " + error.message);
+    res.status(400).send("ERROR " + error.message);
   }
 });
 
@@ -59,7 +55,10 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
       }
     });
 
-    res.status(200).json({ data });
+    res.status(200).json({
+      message: "Connections fetched successfully",
+      data: data,
+    });
   } catch (error) {
     res.status(400).send("ERROR: " + error.message);
   }
