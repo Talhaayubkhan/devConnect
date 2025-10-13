@@ -5,19 +5,21 @@ const Connections = () => {
   const { connectionData } = useFetchConnections();
 
   return (
-    <div className="p-6">
-      <h2 className="text-5xl mb-7 text-center font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">
-        Connections
+    <div className="p-6 min-h-screen bg-gradient-to-b from-slate-800 to-slate-900">
+      <h2 className="text-5xl mb-8 text-center font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">
+        My Connections
       </h2>
-      <div className="flex justify-center items-center flex-col gap-10">
-        {connectionData && connectionData.length > 0 ? (
-          connectionData.map((connection) => (
+      {connectionData && connectionData.length > 0 ? (
+        <div className="flex flex-col items-center gap-8">
+          {connectionData.map((connection) => (
             <ConnectionCards key={connection._id} connections={connection} />
-          ))
-        ) : (
-          <p className="text-gray-500">No connections found.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-400 text-center text-lg mt-10">
+          No connections found 🤝
+        </p>
+      )}
     </div>
   );
 };

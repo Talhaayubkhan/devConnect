@@ -1,6 +1,4 @@
-import React from "react";
 import EditProfile from "../components/EditProfile";
-import UserCard from "../components/UserCard";
 import { useSelector } from "react-redux";
 
 const Profile = () => {

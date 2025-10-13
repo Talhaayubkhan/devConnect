@@ -1,9 +1,7 @@
-import React from "react";
-
-const RequestCard = ({ request }) => {
+const RequestCard = ({ request, onReview, loading }) => {
   if (!request) return null;
 
-  const { firstName, lastName, photoURL, about, age, gender, skills } =
+  const { _id, firstName, lastName, photoURL, about, age, gender, skills } =
     request.fromUserId || {};
 
   return (
@@ -58,12 +56,18 @@ const RequestCard = ({ request }) => {
         </div>
 
         {/* Actions (Centered Vertically) */}
-        <div className="flex flex-col gap-3 mt-1.5 items-center justify-center h-full">
-          <button className="btn btn-sm bg-green-600 hover:bg-green-700 border-none text-white w-24">
-            Accept
+        <div className="flex flex-col gap-3 mt-1.5 items-center justify-center h-full cursor-pointer">
+          <button
+            className="btn btn-sm bg-green-600 hover:bg-green-700 border-none text-white w-24"
+            onClick={() => onReview("accepted", request._id)}
+          >
+            {loading ? "Accepting.." : "Accept"}
           </button>
-          <button className="btn btn-sm bg-red-600 hover:bg-red-700 border-none text-white w-24">
-            Reject
+          <button
+            className="btn btn-sm bg-red-600 hover:bg-red-700 border-none text-white w-24"
+            onClick={() => onReview("rejected", request._id)}
+          >
+            {loading ? "Rejecting" : "Reject"}
           </button>
         </div>
       </div>
