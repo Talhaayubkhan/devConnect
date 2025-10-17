@@ -7,7 +7,6 @@ const RequestCard = ({ request, onReview, loading }) => {
   return (
     <div className="flex justify-center items-center w-full px-4">
       <div className="card w-full max-w-2xl bg-base-100/90 backdrop-blur-md shadow-lg border border-slate-700/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-center sm:items-start gap-4 hover:shadow-xl hover:scale-[1.01] transition-all duration-300">
-        {/* Profile Image */}
         <div className="flex-shrink-0">
           <img
             src={photoURL || "/default-user.png"}
@@ -16,13 +15,11 @@ const RequestCard = ({ request, onReview, loading }) => {
           />
         </div>
 
-        {/* User Info */}
         <div className="flex-1 text-center sm:text-left">
           <h2 className="text-xl font-semibold text-white">
             {firstName} {lastName}
           </h2>
 
-          {/* Age & Gender */}
           {(age || gender) && (
             <p className="text-slate-400 text-sm mt-0.5">
               {age && `${age} years`}
@@ -31,12 +28,10 @@ const RequestCard = ({ request, onReview, loading }) => {
             </p>
           )}
 
-          {/* About */}
           <p className="text-slate-300 text-sm mt-1 italic line-clamp-2">
             {about || "No bio available."}
           </p>
 
-          {/* Skills */}
           {skills && skills.length > 0 ? (
             <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
               {skills.map((skill, index) => (
@@ -55,19 +50,38 @@ const RequestCard = ({ request, onReview, loading }) => {
           )}
         </div>
 
-        {/* Actions (Centered Vertically) */}
+        {/* Actions */}
         <div className="flex flex-col gap-3 mt-1.5 items-center justify-center h-full cursor-pointer">
           <button
-            className="btn btn-sm bg-green-600 hover:bg-green-700 border-none text-white w-24"
+            disabled={loading}
+            className={`btn btn-sm w-24 text-white border-none ${
+              loading
+                ? "bg-slate-600 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+            }`}
             onClick={() => onReview("accepted", request._id)}
           >
-            {loading ? "Accepting.." : "Accept"}
+            {loading ? (
+              <span className="loading loading-spinner loading-sm text-white"></span>
+            ) : (
+              "Accept"
+            )}
           </button>
+
           <button
-            className="btn btn-sm bg-red-600 hover:bg-red-700 border-none text-white w-24"
+            disabled={loading}
+            className={`btn btn-sm w-24 text-white border-none ${
+              loading
+                ? "bg-slate-600 cursor-not-allowed"
+                : "bg-red-600 hover:bg-red-700"
+            }`}
             onClick={() => onReview("rejected", request._id)}
           >
-            {loading ? "Rejecting" : "Reject"}
+            {loading ? (
+              <span className="loading loading-spinner loading-sm text-white"></span>
+            ) : (
+              "Reject"
+            )}
           </button>
         </div>
       </div>

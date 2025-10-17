@@ -42,7 +42,7 @@ const ConnectionCards = ({ connections }) => {
             </p>
           )}
         </div>
-        {/* 
+
         <div className="flex flex-col items-center justify-center sm:flex-row gap-2 sm:ml-3 mt-4 sm:mt-0">
           <button className="btn btn-sm bg-indigo-600 hover:bg-indigo-700 border-none text-white">
             View
@@ -50,7 +50,7 @@ const ConnectionCards = ({ connections }) => {
           <button className="btn btn-sm bg-slate-700 hover:bg-slate-600 border-none text-white">
             Message
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );

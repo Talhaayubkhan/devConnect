@@ -1,9 +1,55 @@
+import axios from "axios";
 import React from "react";
+import { BASE_URL } from "../config/config";
+import { toast } from "react-toastify";
+import { removeUserFromFeed } from "../redux-toolkit/slices/feedSlice";
+import { useDispatch } from "react-redux";
 
 const UserCard = ({ user }) => {
+  const dispatch = useDispatch();
+
+  const [loadingIgnore, setLoadingIgnore] = React.useState(false);
+  const [loadingInterested, setLoadingInterested] = React.useState(false);
+
   if (!user) return null;
 
-  const { firstName, lastName, photoURL, about, age, skills, gender } = user;
+  const { _id, firstName, lastName, photoURL, about, age, skills, gender } =
+    user;
+
+  const handleSendRequest = async (status, toUserId) => {
+    try {
+      if (status === "ignored") setLoadingIgnore(true);
+      if (status === "interested") setLoadingInterested(true);
+
+      const res = await axios.post(
+        `${BASE_URL}/request/send/${status}/${toUserId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      // ✅ Frontend message from API
+      if (res?.data?.message) {
+        toast.success(res.data.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+      }
+
+      // ✅ Remove from feed after action
+      dispatch(removeUserFromFeed(toUserId));
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Something went wrong.";
+      toast.error(errorMessage, {
+        position: "bottom-right",
+        autoClose: 2000,
+      });
+    } finally {
+      // ✅ Reset correct button
+      if (status === "ignored") setLoadingIgnore(false);
+      if (status === "interested") setLoadingInterested(false);
+    }
+  };
 
   return (
     <div className="flex justify-center items-center px-4">
@@ -16,6 +62,7 @@ const UserCard = ({ user }) => {
             className="w-full h-full object-cover object-center"
           />
         </div>
+
         {/* User Info */}
         <div className="card-body text-center p-2">
           <h2 className="text-2xl font-semibold text-white">
@@ -33,7 +80,7 @@ const UserCard = ({ user }) => {
           {/* Skills */}
           {skills && skills.length > 0 && (
             <div className="flex flex-wrap justify-center gap-1">
-              {skills?.map((skill, index) => (
+              {skills.map((skill, index) => (
                 <span
                   key={index}
                   className="text-xs bg-slate-700/60 text-slate-200 px-2 py-1 rounded-full"
@@ -51,11 +98,28 @@ const UserCard = ({ user }) => {
 
           {/* Actions */}
           <div className="card-actions justify-center mt-2 items-center">
-            <button className="btn bg-red-500 hover:bg-red-600 border-none text-white">
-              Ignore
+            <button
+              className="btn bg-red-500 hover:bg-red-600 border-none text-white"
+              onClick={() => handleSendRequest("ignored", _id)}
+              disabled={loadingIgnore || loadingInterested}
+            >
+              {loadingIgnore ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                "Ignore"
+              )}
             </button>
-            <button className="btn bg-green-500 hover:bg-green-600 border-none text-white">
-              Interested
+
+            <button
+              className="btn bg-green-500 hover:bg-green-600 border-none text-white"
+              onClick={() => handleSendRequest("interested", _id)}
+              disabled={loadingIgnore || loadingInterested}
+            >
+              {loadingInterested ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                "Interested"
+              )}
             </button>
           </div>
         </div>

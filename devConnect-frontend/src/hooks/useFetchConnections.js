@@ -7,6 +7,8 @@ import { useEffect } from "react";
 
 export const useFetchConnections = () => {
   const connectionData = useSelector((state) => state?.connections);
+  console.log(connectionData);
+
   const dispatch = useDispatch();
 
   const showConnections = async () => {

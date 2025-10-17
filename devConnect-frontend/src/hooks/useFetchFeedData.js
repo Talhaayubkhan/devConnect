@@ -14,7 +14,7 @@ export const useFetchFeedData = () => {
         withCredentials: true,
       });
 
-      dispatch(addFeedData(res.data.data));
+      dispatch(addFeedData(res?.data?.data));
     } catch (error) {
       toast.error(error?.response?.data?.message);
       console.error(error);

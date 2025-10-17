@@ -7,8 +7,11 @@ export const requestSlice = createSlice({
     addRequestData: (state, action) => {
       return action.payload;
     },
+    removeUserData: (state, action) => {
+      return null;
+    },
   },
 });
 
-export const { addRequestData } = requestSlice.actions;
+export const { addRequestData, removeUserData } = requestSlice.actions;
 export default requestSlice.reducer;

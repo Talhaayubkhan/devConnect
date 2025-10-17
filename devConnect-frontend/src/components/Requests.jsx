@@ -1,28 +1,10 @@
 import RequestCard from "./RequestCard";
 import { useFetchRequests } from "../hooks/useFetchRequests";
-import axios from "axios";
-import { BASE_URL } from "../config/config";
-import { useState } from "react";
+import { useReviewRequest } from "../hooks/useReviewRequests";
 
 const Requests = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const { requests } = useFetchRequests();
-
-  const reviewRequest = async (status, requestId) => {
-    try {
-      setIsLoading(true);
-      const res = await axios.post(
-        `${BASE_URL}/request/review/${status}/${requestId}`,
-        {},
-        { withCredentials: true }
-      );
-      console.log("Request Response:", res.data);
-    } catch (error) {
-      console.error("ERROR ", error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { loadingRequestId, reviewRequest } = useReviewRequest();
 
   return (
     <div className="p-6 min-h-screen bg-gradient-to-b from-slate-800 to-slate-900">
@@ -36,7 +18,7 @@ const Requests = () => {
               key={req._id}
               request={req}
               onReview={reviewRequest}
-              loading={isLoading}
+              loading={loadingRequestId === req._id}
             />
           ))
         ) : (

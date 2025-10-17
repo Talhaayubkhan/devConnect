@@ -9,8 +9,6 @@ export const useFetchRequests = () => {
   const requests = useSelector((store) => store?.requests);
   // console.log(requests);
 
-  //   console.log(requests);
-
   const dispatch = useDispatch();
 
   const showAllRequests = async () => {
@@ -18,6 +16,7 @@ export const useFetchRequests = () => {
       const res = await axios.get(`${BASE_URL}/user/request/received`, {
         withCredentials: true,
       });
+      console.log(res.data.data);
 
       dispatch(addRequestData(res.data.data));
     } catch (error) {
