@@ -16,7 +16,7 @@ export const useFetchRequests = () => {
       const res = await axios.get(`${BASE_URL}/user/request/received`, {
         withCredentials: true,
       });
-      console.log(res.data.data);
+      // console.log(res.data.data);
 
       dispatch(addRequestData(res.data.data));
     } catch (error) {

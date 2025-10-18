@@ -181,6 +181,7 @@ const EditProfile = ({ user }) => {
         <div className="flex justify-center w-92">
           <UserCard
             variant="profile"
+            editable
             user={{
               firstName,
               lastName,

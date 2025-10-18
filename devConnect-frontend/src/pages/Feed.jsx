@@ -3,22 +3,20 @@ import { useFetchFeedData } from "../hooks/useFetchFeedData";
 
 const Feed = () => {
   const { feed } = useFetchFeedData();
-  if (!feed) return;
+
+  if (!feed) return null;
 
   if (feed.length <= 0) {
     return (
-      <div className="min-h-screen -mt-10 bg-gradient-to-b from-slate-800 to-slate-900 flex flex-col justify-center items-center">
-        <div className="w-full">
-          <h1 className="text-5xl mb-8 text-center font-bold text-red-500 hover:text-indigo-400 transition-colors cursor-pointer">
-            No users found.
-          </h1>
-        </div>
+      <div className="flex-grow flex items-center justify-center bg-gradient-to-b from-slate-800 to-slate-900 text-center">
+        <h1 className="text-4xl font-bold text-red-500">No users found.</h1>
       </div>
     );
   }
+
   return (
-    <div className="min-h-screen -mt-10 bg-gradient-to-b from-slate-800 to-slate-900 flex flex-col justify-center items-center">
-      <div className="w-full">
+    <div className="flex-grow bg-gradient-to-b from-slate-800 to-slate-900 py-8">
+      <div className="flex flex-col items-center gap-10">
         <UserCard user={feed[0]} />
       </div>
     </div>

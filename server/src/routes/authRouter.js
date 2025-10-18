@@ -18,12 +18,18 @@ authRouter.post("/signup", async (req, res) => {
       emailId,
       password: passwordHashed,
     });
-
     await user.save();
 
-    res.send("User Create Successfully!");
+    res.status(201).json({
+      message: "Account created successfully",
+      data: user,
+    });
   } catch (error) {
-    res.status(400).send("Error While Creating User: " + error.message);
+    console.error("Signup Error:", error);
+    res.status(400).json({
+      message: "Failed to create user",
+      error: error.message,
+    });
   }
 });
 
@@ -48,12 +54,14 @@ authRouter.post("/login", async (req, res) => {
     }
 
     const token = await user.getJWTAuthToken();
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
-    return res.status(200).json({ data: user, message: "Login successful" });
+    return res.status(200).json({ message: "Login successful", data: user });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error("Login Error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

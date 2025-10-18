@@ -52,14 +52,23 @@ requestRouter.post(
 
       await connectionRequest.save();
 
-      res.status(200).json({
-        message: "Connection request sent!",
-        data: connectionRequest,
+      let message;
+      if (status === "interested") {
+        message = "Connection request sent successfully!";
+      } else if (status === "ignored") {
+        message = "User ignored and removed from Feed";
+      }
+
+      return res.status(200).json({
+        data: {
+          status,
+          message,
+        },
       });
     } catch (error) {
-      res.status(400).json({
-        message: "Bad Request",
-        error: error.message,
+      console.error("Error in sending connection request:", error);
+      return res.status(500).json({
+        message: "Something went wrong. Please try again later.",
       });
     }
   }

@@ -1,35 +1,45 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { AlertTriangle } from "lucide-react";
 
 const Error = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-red-100 via-white to-red-50 text-center p-6">
-      <div role="alert" className="alert alert-error shadow-lg max-w-md">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 shrink-0 stroke-current"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-        <span className="text-lg font-semibold">Error! Page Not Found</span>
-      </div>
-
-      <p className="mt-6 text-gray-600 text-sm">
-        The page you’re looking for doesn’t exist or has been moved.
-      </p>
-
-      <Link
-        to="/feed"
-        className="mt-6 btn btn-error text-white rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-transform"
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-100 text-center p-6">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 100, damping: 10 }}
+        className="flex flex-col items-center space-y-4"
       >
-        Back to Home
-      </Link>
+        <motion.div
+          animate={{ y: [0, -8, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="bg-white p-6 rounded-full shadow-lg"
+        >
+          <AlertTriangle className="w-12 h-12 text-red-500" />
+        </motion.div>
+
+        <h1 className="text-3xl font-bold text-gray-800">
+          Oops! Page Not Found
+        </h1>
+        <p className="text-gray-600 max-w-md">
+          The page you’re looking for might have been moved, deleted, or never
+          existed. But don’t worry — let’s get you back on track!
+        </p>
+
+        <motion.div whileHover={{ scale: 1.05 }}>
+          <Link
+            to="/feed"
+            className="mt-4 inline-block bg-red-500 text-white font-medium px-6 py-3 rounded-xl shadow-md hover:bg-red-600 transition-all duration-200"
+          >
+            Back to Feed
+          </Link>
+        </motion.div>
+      </motion.div>
+
+      <footer className="absolute bottom-6 text-gray-400 text-xs">
+        © {new Date().getFullYear()} DevConnect. All rights reserved.
+      </footer>
     </div>
   );
 };

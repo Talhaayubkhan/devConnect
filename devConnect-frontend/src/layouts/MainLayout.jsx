@@ -3,9 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useFetchProfile } from "../hooks/useFetchProfile";
 const MainLayout = () => {
-  const { loading } = useFetchProfile();
-
-  if (loading) return <div> Loading... </div>;
+  useFetchProfile();
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-900">

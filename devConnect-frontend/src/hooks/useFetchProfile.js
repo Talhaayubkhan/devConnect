@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,6 @@ import { addUser } from "../redux-toolkit/slices/userSlice";
 import { BASE_URL } from "../config/config";
 
 export const useFetchProfile = () => {
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ export const useFetchProfile = () => {
 
       if (status === 401) {
         toast.info("Please login again!");
-        navigate("/login");
+        return navigate("/login");
       } else if (status === 403) {
         toast.error("Access denied. Unauthorized user.");
       } else if (status === 404) {
@@ -39,14 +38,10 @@ export const useFetchProfile = () => {
       }
 
       console.error("Profile Fetch Error:", error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchUserProfile();
   }, []);
-
-  return { loading };
 };
