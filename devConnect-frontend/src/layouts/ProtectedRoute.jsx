@@ -5,7 +5,7 @@ const ProtectedRoute = () => {
   const user = useSelector((state) => state?.user);
 
   // ❌ If not logged in, redirect to login page
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/login" />;
 
   // ✅ If logged in, show the page
   return <Outlet />;

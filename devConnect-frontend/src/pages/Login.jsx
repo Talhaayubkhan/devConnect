@@ -70,6 +70,7 @@ const AuthForm = () => {
 
         if (isLoginForm) {
           dispatch(addUser(res?.data?.data));
+          localStorage.setItem("user", JSON.stringify(res?.data?.data));
           setTimeout(() => navigate("/feed"), 1500);
         } else {
           // formik.setFieldValue("emailId", values.emailId); // keep email for login

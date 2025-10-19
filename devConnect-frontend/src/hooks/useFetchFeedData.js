@@ -7,9 +7,12 @@ import React from "react";
 
 export const useFetchFeedData = () => {
   const feed = useSelector((store) => store?.feed);
+
+  const [isLoadingConnections, setIsLoadingConnections] = React.useState(false);
   const dispatch = useDispatch();
   const getFeedData = async () => {
     try {
+      setIsLoadingConnections(true);
       const res = await axios.get(`${BASE_URL}/feed`, {
         withCredentials: true,
       });
@@ -18,11 +21,13 @@ export const useFetchFeedData = () => {
     } catch (error) {
       toast.error(error?.response?.data?.message);
       console.error(error);
+    } finally {
+      setIsLoadingConnections(false);
     }
   };
 
   React.useEffect(() => {
     getFeedData();
   }, []);
-  return { feed };
+  return { feed, isLoadingConnections };
 };
