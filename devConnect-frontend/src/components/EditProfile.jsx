@@ -24,7 +24,7 @@ const EditProfile = ({ user }) => {
   } = useUserSaveProfile(user);
 
   return (
-    <div className="min-h-screen  flex justify-center items-start py-10 px-6">
+    <div className="min-h-screen flex justify-center items-start py-5 px-6">
       <div className="flex flex-col md:flex-row gap-10 w-full max-w-6xl">
         {/* ✏️ Left: Edit Form */}
         <div className="flex-1 flex justify-center">
