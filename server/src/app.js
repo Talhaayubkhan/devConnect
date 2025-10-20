@@ -7,11 +7,10 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: ["https://devconnecttalk.netlify.app"],
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
-
 app.use(express.json());
 app.use(cookieParser());
 
@@ -28,7 +27,7 @@ app.use("/", userRouter);
 connectDB()
   .then(() => {
     console.log("Database connected successfully");
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env, () => {
       console.log("Server is running on port 4000");
     });
   })
