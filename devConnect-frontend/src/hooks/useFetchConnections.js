@@ -1,9 +1,8 @@
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../config/config";
 import { toast } from "react-toastify";
 import { addConnectionData } from "../redux-toolkit/slices/connectionSlice";
 import { useEffect, useState } from "react";
+import api from "../api/axios";
 
 export const useFetchConnections = () => {
   const connectionData = useSelector((state) => state?.connections);
@@ -13,9 +12,7 @@ export const useFetchConnections = () => {
   const showConnections = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${BASE_URL}/user/connections`, {
-        withCredentials: true,
-      });
+      const res = await api.get("/user/connections");
       dispatch(addConnectionData(res?.data?.data || []));
     } catch (error) {
       console.error("Error fetching connections:", error);

@@ -16,10 +16,10 @@ const Feed = () => {
 
   return isLoadingConnections ? (
     <div className="flex-grow flex items-center justify-center bg-gradient-to-b from-slate-800 to-slate-900">
-      <span className="loading loading-spinner loading-lg text-indigo-400 mt-50"></span>
+      <span className="loading loading-spinner loading-lg text-indigo-400 mt-30 "></span>
     </div>
   ) : (
-    <div className="flex-grow bg-gradient-to-b from-slate-800 to-slate-900 py-8">
+    <div className="flex-grow bg-gradient-to-b from-slate-800 to-slate-900 py-4">
       <div className="flex flex-col items-center gap-10">
         <UserCard user={feed[0]} />
       </div>

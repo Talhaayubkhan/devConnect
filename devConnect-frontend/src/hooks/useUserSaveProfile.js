@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../redux-toolkit/slices/userSlice";
-import { BASE_URL } from "../config/config";
-import axios from "axios";
+
 import { toast } from "react-toastify";
+import api from "../api/axios";
 
 export const useUserSaveProfile = (user) => {
   const [firstName, setFirstName] = useState(user?.firstName || "");
@@ -31,9 +31,7 @@ export const useUserSaveProfile = (user) => {
         skills,
       };
 
-      const res = await axios.patch(`${BASE_URL}/profile/edit`, payload, {
-        withCredentials: true,
-      });
+      const res = await api.patch(`/profile/edit`, payload);
 
       if (res?.data?.success) {
         dispatch(addUser(res?.data?.user));

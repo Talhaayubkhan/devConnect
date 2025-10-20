@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import { useSendConnectionRequest } from "../hooks/useSendConnectionRequest";
+import { User, Code, Info, Heart, X } from "lucide-react";
 
 const UserCard = ({ user, variant = "feed", editable = false }) => {
   const { handleSendRequest, loadingIgnore, loadingInterested } =
@@ -10,16 +12,23 @@ const UserCard = ({ user, variant = "feed", editable = false }) => {
     user;
 
   return (
-    <div className="flex justify-center items-center w-full px-4 py-6">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95, y: 40 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      whileHover={{ scale: 1 }}
+      className="flex justify-center items-center w-full px-4 py-6"
+    >
       <div
-        className={`relative w-full max-w-sm rounded-2xl border border-slate-700/40 shadow-lg overflow-hidden transition-transform duration-200 
+        className={`relative w-full max-w-sm rounded-3xl border border-slate-700/40 shadow-lg overflow-hidden 
+        backdrop-blur-lg transition-all duration-300
         ${
           variant === "feed"
-            ? "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 hover:scale-[1.02] hover:shadow-2xl"
-            : "bg-base-100/90 backdrop-blur-md"
+            ? "bg-gradient-to-br from-slate-900 via-slate-950 to-black hover:shadow-2xl"
+            : "bg-base-100/90"
         }`}
       >
-        {/* Profile Header */}
+        {/* 🖼 Profile Image Section */}
         <div className="relative">
           <img
             src={
@@ -27,16 +36,18 @@ const UserCard = ({ user, variant = "feed", editable = false }) => {
               "https://cdn-icons-png.flaticon.com/512/149/149071.png"
             }
             alt={`${firstName || "User"} ${lastName || ""}`}
-            className="w-full h-75 object-cover object-center opacity-80"
+            className="w-full h-80 object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent"></div>
 
-          <div className="absolute bottom-3 left-4">
-            <h2 className="text-2xl font-semibold text-white drop-shadow-md">
+          {/* 🧠 User Info Overlay */}
+          <div className="absolute bottom-4 left-4 text-white">
+            <h2 className="text-2xl font-bold tracking-wide flex items-center gap-2">
+              <User className="w-5 h-5 text-indigo-400" />
               {firstName || "Unnamed"} {lastName || ""}
             </h2>
             {(age || gender) && (
-              <p className="text-slate-300 text-sm">
+              <p className="text-slate-300 text-sm mt-1">
                 {age && `${age} yrs`}
                 {age && gender && " • "}
                 {gender && gender.charAt(0).toUpperCase() + gender.slice(1)}
@@ -45,56 +56,63 @@ const UserCard = ({ user, variant = "feed", editable = false }) => {
           </div>
         </div>
 
-        {/* Card Body */}
-        <div className="p-4 text-center">
+        {/* 💬 Card Body */}
+        <div className="p-5 text-center">
+          {/* 🧩 Skills */}
           {skills && skills.length > 0 && (
             <div className="flex flex-wrap justify-center gap-2 mb-3">
               {skills.map((skill, i) => (
                 <span
                   key={i}
-                  className="px-2 py-1 text-xs rounded-full bg-slate-700/60 text-slate-200"
+                  className="px-3 py-1 text-xs font-medium rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20"
                 >
+                  <Code className="inline-block w-3 h-3 mr-1" />
                   {skill}
                 </span>
               ))}
             </div>
           )}
 
-          <p className="text-slate-400 text-sm italic line-clamp-3 mb-4">
-            {about || "No bio provided yet."}
+          {/* 🧾 About */}
+          <p className="text-slate-400 text-sm italic line-clamp-3 mb-5">
+            {about || "This developer hasn’t written a bio yet."}
           </p>
 
-          {/* Show Action Buttons only for feed variant */}
+          {/* ❤️ Tinder-like Buttons */}
           {variant === "feed" && !editable && (
-            <div className="flex justify-center gap-3">
-              <button
+            <div className="flex justify-center gap-6">
+              {/* ❌ Ignore */}
+              <motion.button
+                whileTap={{ scale: 0.9 }}
                 onClick={() => handleSendRequest("ignored", _id)}
                 disabled={loadingIgnore || loadingInterested}
-                className="btn bg-gradient-to-r from-red-500 to-red-600 border-none text-white hover:from-red-600 hover:to-red-700"
+                className="btn bg-gradient-to-r from-rose-600 to-rose-700 border-none text-white shadow-md hover:shadow-rose-500/40 hover:scale-105"
               >
                 {loadingIgnore ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (
-                  "Ignore"
+                  <X className="w-5 h-5" />
                 )}
-              </button>
+              </motion.button>
 
-              <button
+              {/* 💚 Interested */}
+              <motion.button
+                whileTap={{ scale: 0.9 }}
                 onClick={() => handleSendRequest("interested", _id)}
                 disabled={loadingIgnore || loadingInterested}
-                className="btn bg-gradient-to-r from-emerald-500 to-green-600 border-none text-white hover:from-green-600 hover:to-green-700"
+                className="btn bg-gradient-to-r from-emerald-500 to-green-600 border-none text-white shadow-md hover:shadow-emerald-400/40 hover:scale-105"
               >
                 {loadingInterested ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (
-                  "Interested"
+                  <Heart className="w-5 h-5 fill-current" />
                 )}
-              </button>
+              </motion.button>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

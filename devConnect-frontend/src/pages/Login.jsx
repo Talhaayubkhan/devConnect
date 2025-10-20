@@ -1,16 +1,14 @@
-import React, { useState } from "react";
-import { HiMail } from "react-icons/hi";
-import { MdLockOutline } from "react-icons/md";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import { FaUser, FaUserEdit } from "react-icons/fa";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Mail, Lock, Eye, EyeOff, User, UserPlus, Loader2 } from "lucide-react";
 import { useFormik } from "formik";
-import axios from "axios";
 import { emailRegex, strongPasswordRegex } from "../constants/regex";
 import { useDispatch } from "react-redux";
 import { addUser } from "../redux-toolkit/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { BASE_URL } from "../config/config";
+import { InputField } from "../components/common/InputField";
+import api from "../api/axios";
 
 const AuthForm = () => {
   const dispatch = useDispatch();
@@ -29,7 +27,6 @@ const AuthForm = () => {
     validate: (values) => {
       const errors = {};
 
-      // Common Validation
       if (!values.emailId) {
         errors.emailId = "Email is required!";
       } else if (!emailRegex.test(values.emailId)) {
@@ -43,7 +40,6 @@ const AuthForm = () => {
           "Password must include upper, lower, number & symbol!";
       }
 
-      // Signup-only Validation
       if (!isLoginForm) {
         if (!values.firstName.trim()) errors.firstName = "First name required!";
         if (!values.lastName.trim()) errors.lastName = "Last name required!";
@@ -55,15 +51,11 @@ const AuthForm = () => {
     onSubmit: async (values, { resetForm }) => {
       try {
         setIsLoading(true);
-
         const endpoint = isLoginForm ? "/login" : "/signup";
-        const res = await axios.post(`${BASE_URL}${endpoint}`, values, {
-          withCredentials: true,
-        });
+        const res = await api.post(`${endpoint}`, values);
 
         toast.success(
-          isLoginForm ? "Login successful!" : "Signup successful! Welcome 🎉",
-          { autoClose: 2000 }
+          isLoginForm ? "Login successful!" : "Signup successful! Welcome 🎉"
         );
 
         resetForm();
@@ -73,12 +65,10 @@ const AuthForm = () => {
           localStorage.setItem("user", JSON.stringify(res?.data?.data));
           setTimeout(() => navigate("/feed"), 1500);
         } else {
-          // formik.setFieldValue("emailId", values.emailId); // keep email for login
           setTimeout(() => setIsLoginForm(true), 1500);
         }
       } catch (error) {
         const status = error?.response?.status;
-
         if (status === 400)
           toast.warn(
             isLoginForm
@@ -87,10 +77,7 @@ const AuthForm = () => {
           );
         else if (status === 404)
           toast.info("No account found. Try signing up first!");
-        else if (status === 500) toast.error("Server error. Please try later!");
         else toast.error("Something went wrong!");
-
-        console.error(error.message);
       } finally {
         setIsLoading(false);
       }
@@ -98,89 +85,79 @@ const AuthForm = () => {
   });
 
   return (
-    <div className="card bg-base-100/90 backdrop-blur-lg w-96 shadow-2xl border border-slate-700/40 rounded-2xl p-6">
-      <div className="card-body">
-        <h2 className="text-2xl font-bold text-center text-white">
-          {isLoginForm ? "Welcome Back 👋" : "Create an Account 🚀"}
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="card bg-base-100/90 backdrop-blur-lg w-[22rem] sm:w-96 shadow-2xl border border-slate-700/40 rounded-2xl p-6"
+    >
+      <motion.div
+        key={isLoginForm ? "login" : "signup"}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="card-body"
+      >
+        {/* Header */}
+        <h2 className="text-2xl font-bold text-center text-white flex items-center justify-center gap-2">
+          {isLoginForm ? "Welcome Back" : "Create an Account"}
+          {isLoginForm ? (
+            <User className="text-indigo-400" />
+          ) : (
+            <UserPlus className="text-indigo-400" />
+          )}
         </h2>
-        <p className="text-center text-white/80 mb-3">
+        <p className="text-center text-white/70 mb-3 text-sm">
           {isLoginForm
             ? "Login to continue your journey"
-            : "Join us and start your journey"}
+            : "Join us and start building connections"}
         </p>
 
-        {/* ✅ Formik Form */}
-        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
-          {/* 👤 Signup-only fields */}
+        {/* Form */}
+        <form
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col gap-5 mt-3"
+        >
           {!isLoginForm && (
             <>
-              <div>
-                <label className="input input-bordered flex items-center gap-2">
-                  <FaUser className="text-slate-400 text-md" />
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    placeholder="First Name"
-                    onChange={formik.handleChange}
-                    value={formik.values.firstName}
-                    className="grow focus:outline-none bg-transparent"
-                  />
-                </label>
-                {formik.errors.firstName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {formik.errors.firstName}
-                  </p>
-                )}
-              </div>
+              <InputField
+                id="firstName"
+                name="firstName"
+                placeholder="First Name"
+                icon={<User className="text-slate-400" size={18} />}
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+                error={formik.errors.firstName}
+              />
 
-              <div>
-                <label className="input input-bordered flex items-center gap-2">
-                  <FaUserEdit className="text-slate-400 text-lg" />
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    placeholder="Last Name"
-                    onChange={formik.handleChange}
-                    value={formik.values.lastName}
-                    className="grow focus:outline-none bg-transparent"
-                  />
-                </label>
-                {formik.errors.lastName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {formik.errors.lastName}
-                  </p>
-                )}
-              </div>
+              <InputField
+                id="lastName"
+                name="lastName"
+                placeholder="Last Name"
+                icon={<UserPlus className="text-slate-400" size={18} />}
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+                error={formik.errors.lastName}
+              />
             </>
           )}
 
-          {/* ✉️ Email */}
-          <div>
-            <label className="input input-bordered flex items-center gap-2">
-              <HiMail className="text-slate-400 text-lg" />
-              <input
-                id="emailId"
-                name="emailId"
-                type="email"
-                placeholder="mail@site.com"
-                onChange={formik.handleChange}
-                value={formik.values.emailId}
-                className="grow focus:outline-none bg-transparent"
-              />
-            </label>
-            {formik.errors.emailId && (
-              <p className="text-red-500 text-sm mt-1">
-                {formik.errors.emailId}
-              </p>
-            )}
-          </div>
+          <InputField
+            id="emailId"
+            name="emailId"
+            type="email"
+            placeholder="mail@site.com"
+            icon={<Mail className="text-slate-400" size={18} />}
+            value={formik.values.emailId}
+            onChange={formik.handleChange}
+            error={formik.errors.emailId}
+          />
 
-          {/* 🔒 Password */}
+          {/* Password Field */}
           <div>
             <label className="input input-bordered flex items-center gap-2 relative">
-              <MdLockOutline className="text-slate-400 text-lg" />
+              <Lock className="text-slate-400" size={18} />
               <input
                 id="password"
                 name="password"
@@ -190,42 +167,46 @@ const AuthForm = () => {
                 value={formik.values.password}
                 className="grow focus:outline-none bg-transparent pr-8"
               />
-
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute right-3 text-slate-400 hover:text-white transition-colors"
               >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </label>
-
             {formik.errors.password && (
-              <p className="text-red-500 text-sm">{formik.errors.password}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.password}
+              </p>
             )}
           </div>
 
-          {/* Submit Button */}
-          <button
+          {/* Button */}
+          <motion.button
             type="submit"
             disabled={isLoading}
-            className={`btn btn-primary w-full text-lg font-semibold transition-all duration-200 ${
+            whileTap={{ scale: 0.95 }}
+            className={`btn btn-primary  w-full text-lg font-semibold border-none transition-all duration-200 ${
               isLoading
                 ? "opacity-70 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700 border-none"
+                : "bg-indigo-600 hover:bg-indigo-700"
             }`}
           >
-            {isLoading
-              ? isLoginForm
-                ? "Logging in..."
-                : "Creating Account..."
-              : isLoginForm
-              ? "Login"
-              : "Sign Up"}
-          </button>
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2 ">
+                <Loader2 className="animate-spin" size={20} />
+                {isLoginForm ? "Logging in..." : "Creating..."}
+              </span>
+            ) : isLoginForm ? (
+              "Login"
+            ) : (
+              "Sign Up"
+            )}
+          </motion.button>
         </form>
 
-        {/* 🔄 Toggle */}
+        {/* Switch Form */}
         <div className="divider text-sm text-slate-400">or continue with</div>
 
         <p className="text-center text-sm text-slate-500">
@@ -234,13 +215,13 @@ const AuthForm = () => {
             : "Already have an account? "}
           <button
             onClick={() => setIsLoginForm((prev) => !prev)}
-            className="text-indigo-500 hover:underline hover:text-indigo-600 cursor-pointer"
+            className="text-indigo-400 hover:text-indigo-500 hover:underline font-medium cursor-pointer"
           >
             {isLoginForm ? "Sign up" : "Login"}
           </button>
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

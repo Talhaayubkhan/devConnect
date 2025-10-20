@@ -2,29 +2,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { removeUser } from "../redux-toolkit/slices/userSlice";
 import { toast } from "react-toastify";
-import { FaUserCircle } from "react-icons/fa";
-import { BASE_URL } from "../config/config";
-import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, LogOut, Users, Bell } from "lucide-react";
+import { useState } from "react";
+import api from "../api/axios";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((store) => store?.user);
+  const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${BASE_URL}/logout`, {}, { withCredentials: true });
+      await api.post(`/logout`, {});
       toast.success("Logged out successfully");
       localStorage.removeItem("user");
       dispatch(removeUser());
-      return navigate("/login");
+      navigate("/login");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     }
   };
 
   return (
-    <nav className="navbar bg-base-200/80 backdrop-blur-md shadow-md border-b border-slate-700/30 px-4 sticky top-0 z-[100]">
+    <nav className="navbar bg-base-200/70 backdrop-blur-md shadow-md border-b border-slate-700/30 px-4 sticky top-0 z-[100] transition-colors duration-300">
       {/* Left Section */}
       <div className="flex-1">
         <Link
@@ -44,47 +46,79 @@ const Navbar = () => {
           </p>
         )}
 
-        {/* Dropdown */}
-        <div className="dropdown dropdown-end relative">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar hover:scale-105 transition-transform"
+        {/* Avatar & Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setOpen((prev) => !prev)}
+            className="btn btn-ghost btn-circle avatar hover:scale-105 transition-transform duration-200"
           >
             <div className="w-10 rounded-full overflow-hidden border border-slate-600">
               {user?.photoURL ? (
-                <img src={user.photoURL} alt="User avatar" />
+                <img
+                  src={user.photoURL}
+                  alt="User avatar"
+                  className="object-cover w-full h-full"
+                />
               ) : (
-                <FaUserCircle className="text-3xl text-slate-400" />
+                <User className="text-slate-300 mx-auto mt-2" size={26} />
               )}
             </div>
-          </div>
+          </button>
 
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-xl mt-3 w-52 p-2 shadow-lg border border-slate-700/20 z-[200]"
-          >
-            <li>
-              <Link to="/profile" className="flex justify-between">
-                Profile{" "}
-                <span className="badge badge-sm badge-primary">New</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/connections">Connections</Link>
-            </li>
-            <li>
-              <Link to="/requests">Requests</Link>
-            </li>
-            <li>
-              <button
-                onClick={handleLogout}
-                className="text-red-500 hover:text-red-600 font-semibold"
+          <AnimatePresence>
+            {open && (
+              <motion.ul
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="absolute right-0 mt-3 w-56 bg-base-100 rounded-xl p-2 shadow-xl border border-slate-700/20 z-[200]"
               >
-                Logout
-              </button>
-            </li>
-          </ul>
+                <li>
+                  <Link
+                    to="/profile"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 hover:bg-base-200 rounded-lg px-3 py-2"
+                  >
+                    <User size={18} />
+                    <span>Profile</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/connections"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 hover:bg-base-200 rounded-lg px-3 py-2"
+                  >
+                    <Users size={18} />
+                    <span>Connections</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/requests"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 hover:bg-base-200 rounded-lg px-3 py-2"
+                  >
+                    <Bell size={18} />
+                    <span>Requests</span>
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      handleLogout();
+                    }}
+                    className="flex items-center gap-2 text-red-500 hover:bg-red-500/10 rounded-lg px-3 py-2 font-semibold"
+                  >
+                    <LogOut size={18} />
+                    <span>Logout</span>
+                  </button>
+                </li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </nav>

@@ -8,7 +8,7 @@ const userAuth = async (req, res, next) => {
   }
 
   try {
-    const { _id } = jwt.verify(token, "KHAN@2002");
+    const { _id } = jwt.verify(token, process.env.JWT_SECURITY);
     const user = await User.findById(_id);
 
     if (!user) {

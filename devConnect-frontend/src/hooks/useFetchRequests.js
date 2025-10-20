@@ -1,9 +1,8 @@
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../config/config";
 import { addRequestData } from "../redux-toolkit/slices/requestSlice";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import api from "../api/axios";
 
 export const useFetchRequests = () => {
   const requests = useSelector((store) => store?.requests);
@@ -13,9 +12,7 @@ export const useFetchRequests = () => {
   const showAllRequests = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${BASE_URL}/user/request/received`, {
-        withCredentials: true,
-      });
+      const res = await api.get(`/user/request/received`);
       dispatch(addRequestData(res.data.data || []));
     } catch (error) {
       console.error("Error fetching requests:", error);

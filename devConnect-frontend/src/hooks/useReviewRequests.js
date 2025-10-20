@@ -1,9 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
-import { BASE_URL } from "../config/config";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { removeUserData } from "../redux-toolkit/slices/requestSlice";
+import api from "../api/axios";
 
 export const useReviewRequest = () => {
   const [loadingRequestId, setLoadingRequestId] = useState(null);
@@ -13,11 +12,7 @@ export const useReviewRequest = () => {
     try {
       setLoadingRequestId(requestId);
 
-      const res = await axios.post(
-        `${BASE_URL}/request/review/${status}/${requestId}`,
-        {},
-        { withCredentials: true }
-      );
+      const res = await api.post(`/request/review/${status}/${requestId}`, {});
 
       // console.log("Request Response:", res.data);
       if (status === "accepted")

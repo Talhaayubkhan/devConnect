@@ -1,9 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { BASE_URL } from "../config/config";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { removeUserFromFeed } from "../redux-toolkit/slices/feedSlice";
+import api from "../api/axios";
 
 export const useSendConnectionRequest = () => {
   const dispatch = useDispatch();
@@ -16,11 +15,7 @@ export const useSendConnectionRequest = () => {
       if (status === "ignored") setLoadingIgnore(true);
       if (status === "interested") setLoadingInterested(true);
 
-      const res = await axios.post(
-        `${BASE_URL}/request/send/${status}/${toUserId}`,
-        {},
-        { withCredentials: true }
-      );
+      const res = await api.post(`/request/send/${status}/${toUserId}`, {});
 
       const serverStatus = res?.data?.data?.status;
       const message = res?.data?.data?.message;

@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addUser } from "../redux-toolkit/slices/userSlice";
-import { BASE_URL } from "../config/config";
+import api from "../api/axios";
 
 export const useFetchProfile = () => {
   const navigate = useNavigate();
@@ -17,9 +16,7 @@ export const useFetchProfile = () => {
       // If user already in Redux, skip fetch
       if (presentUser) return;
 
-      const res = await axios.get(`${BASE_URL}/profile`, {
-        withCredentials: true,
-      });
+      const res = await api.get(`/profile`);
 
       // ✅ If success → save in Redux
       dispatch(addUser(res?.data?.data));

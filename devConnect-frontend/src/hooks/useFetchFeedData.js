@@ -1,9 +1,8 @@
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../config/config";
 import { addFeedData } from "../redux-toolkit/slices/feedSlice";
 import { toast } from "react-toastify";
 import React from "react";
+import api from "../api/axios";
 
 export const useFetchFeedData = () => {
   const feed = useSelector((store) => store?.feed);
@@ -13,9 +12,7 @@ export const useFetchFeedData = () => {
   const getFeedData = async () => {
     try {
       setIsLoadingConnections(true);
-      const res = await axios.get(`${BASE_URL}/feed`, {
-        withCredentials: true,
-      });
+      const res = await api.get(`/feed`);
 
       dispatch(addFeedData(res?.data?.data));
     } catch (error) {

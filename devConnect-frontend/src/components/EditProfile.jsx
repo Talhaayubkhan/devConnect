@@ -1,7 +1,9 @@
 import { FaUserEdit } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 import UserCard from "./UserCard";
 import { SUPPORTED_GENDER } from "../constants/options";
 import { useUserSaveProfile } from "../hooks/useUserSaveProfile";
+import { FormField } from "./common/FormField";
 
 const EditProfile = ({ user }) => {
   const {
@@ -24,82 +26,79 @@ const EditProfile = ({ user }) => {
   } = useUserSaveProfile(user);
 
   return (
-    <div className="min-h-screen flex justify-center items-start py-5 px-6">
+    <div className="min-h-screen flex justify-center items-start py-10 px-6">
       <div className="flex flex-col md:flex-row gap-10 w-full max-w-6xl">
-        {/* ✏️ Left: Edit Form */}
-        <div className="flex-1 flex justify-center">
-          <div className="bg-base-100 rounded-2xl shadow-xl w-full max-w-md p-6 border border-slate-700/20">
+        {/* ✏️ Left: Modernized Edit Form */}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex-1 flex justify-center"
+        >
+          <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 rounded-2xl shadow-2xl w-full max-w-md p-6 border border-slate-700/30 backdrop-blur-md">
             {/* Header */}
-            <div className="flex items-center justify-center mb-4">
-              <FaUserEdit className="text-2xl text-indigo-500 mr-2" />
-              <h2 className="text-xl font-semibold text-white">Edit Profile</h2>
+            <div className="flex items-center justify-center mb-6">
+              <FaUserEdit className="text-2xl text-indigo-400 mr-2" />
+              <h2 className="text-xl font-semibold text-white tracking-wide">
+                Edit Your Profile
+              </h2>
             </div>
 
             {/* Avatar */}
-            <div className="flex flex-col items-center mb-3">
-              <img
-                src={photoURL}
+            <div className="flex flex-col items-center mb-6">
+              <motion.img
+                src={
+                  photoURL ||
+                  "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                }
                 alt="User Avatar"
-                className="w-24 h-24 object-cover object-center rounded-full border-4 border-indigo-400 shadow-md"
+                className="w-24 h-24 object-cover object-center rounded-full border-4 border-indigo-500 shadow-md"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
               />
+              <p className="text-slate-400 text-sm mt-2 italic">
+                Click “Save” to update changes
+              </p>
             </div>
 
-            {/* Fields */}
-            <div className="space-y-4">
-              {/* Name Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="label">
-                    <span className="label-text text-slate-400">
-                      First Name
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="Enter first name"
-                    className="input input-bordered w-full bg-base-200 text-white"
-                  />
-                </div>
+            {/* Divider */}
+            <div className="border-t border-slate-700/40 my-4"></div>
 
-                <div>
-                  <label className="label">
-                    <span className="label-text text-slate-400">Last Name</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    placeholder="Enter last name"
-                    className="input input-bordered w-full bg-base-200 text-white"
-                  />
-                </div>
+            {/* Fields */}
+            <div className="space-y-5">
+              {/* First & Last Name */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <FormField
+                  label="First Name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="Enter first name"
+                />
+                <FormField
+                  label="Last Name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Enter last name"
+                />
               </div>
 
               {/* Age & Gender */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <FormField
+                  label="Age"
+                  type="number"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  placeholder="Enter age"
+                />
                 <div>
-                  <label className="label">
-                    <span className="label-text text-slate-400">Age</span>
-                  </label>
-                  <input
-                    type="number"
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
-                    placeholder="Enter age"
-                    className="input input-bordered w-full bg-base-200 text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="label">
-                    <span className="label-text text-slate-400">Gender</span>
+                  <label className="label-text text-slate-400 text-sm mb-1 block">
+                    Gender
                   </label>
                   <select
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
-                    className="select select-bordered w-full bg-base-200 text-white"
+                    className="select select-bordered w-full bg-base-200 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
                   >
                     {SUPPORTED_GENDER.map((g) => (
                       <option key={g.value} value={g.value}>
@@ -110,52 +109,32 @@ const EditProfile = ({ user }) => {
                 </div>
               </div>
 
-              {/* Photo URL */}
-              <div>
-                <label className="label">
-                  <span className="label-text text-slate-400">Photo URL</span>
-                </label>
-                <input
-                  type="text"
-                  value={photoURL}
-                  onChange={(e) => setPhotoURL(e.target.value)}
-                  placeholder="Enter image URL"
-                  className="input input-bordered w-full bg-base-200 text-white"
-                />
-              </div>
+              <FormField
+                label="Photo URL"
+                value={photoURL}
+                onChange={(e) => setPhotoURL(e.target.value)}
+                placeholder="Enter image URL"
+              />
 
-              {/* Skills */}
-              <div>
-                <label className="label">
-                  <span className="label-text text-slate-400">Skills</span>
-                </label>
-                <input
-                  type="text"
-                  value={skills}
-                  onChange={(e) =>
-                    setSkills(e.target.value.split(",").map((s) => s.trim()))
-                  }
-                  placeholder="e.g. React, Node, MongoDB"
-                  className="input input-bordered w-full bg-base-200 text-white"
-                />
-              </div>
+              <FormField
+                label="Skills"
+                value={skills}
+                onChange={(e) =>
+                  setSkills(e.target.value.split(",").map((s) => s.trim()))
+                }
+                placeholder="e.g. React, Node, MongoDB"
+              />
 
-              {/* About */}
-              <div>
-                <label className="label">
-                  <span className="label-text text-slate-400">About</span>
-                </label>
-                <textarea
-                  value={about}
-                  onChange={(e) => setAbout(e.target.value)}
-                  placeholder="Write something about yourself..."
-                  className="textarea textarea-bordered w-full bg-base-200 text-white"
-                  rows="3"
-                ></textarea>
-              </div>
+              <FormField
+                label="About"
+                type="textarea"
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+                placeholder="Write something about yourself..."
+              />
 
               {/* Buttons */}
-              <div className="flex justify-end gap-3 mt-4">
+              <div className="flex justify-end gap-3 mt-6">
                 <button
                   type="button"
                   className="btn btn-outline border-slate-600 text-slate-300 hover:bg-slate-700"
@@ -175,23 +154,34 @@ const EditProfile = ({ user }) => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* 👤 Right: Live User Preview */}
-        <div className="flex justify-center w-92">
-          <UserCard
-            variant="profile"
-            editable
-            user={{
-              firstName,
-              lastName,
-              about,
-              age,
-              gender,
-              skills,
-              photoURL,
-            }}
-          />
+        {/* 👤 Right: Animated Live Preview */}
+        <div className="flex justify-center flex-1">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key="user-card-preview" // ✅ Stable key so it won't remount on each input change
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-sm"
+            >
+              <UserCard
+                variant="profile"
+                editable
+                user={{
+                  firstName,
+                  lastName,
+                  about,
+                  age,
+                  gender,
+                  skills,
+                  photoURL,
+                }}
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>
