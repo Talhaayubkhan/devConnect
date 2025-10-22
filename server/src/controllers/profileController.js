@@ -21,6 +21,14 @@ const showProfile = (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
+    const { age } = req.body;
+    if (typeof age !== "undefined" && Number(age) < 1) {
+      return res.status(400).json({
+        success: false,
+        message: "Age cannot be negative.",
+      });
+    }
+
     // 1️⃣ Validate Request Fields
     if (!validateProfileEditData(req)) {
       return res.status(400).json({

@@ -92,8 +92,12 @@ const EditProfile = ({ user }) => {
                 <FormField
                   label="Age"
                   type="number"
+                  min={1}
                   value={age}
-                  onChange={(e) => setAge(e.target.value)}
+                  onChange={(e) => {
+                    const newValue = Number(e.target.value);
+                    setAge(newValue < 1 ? 1 : newValue);
+                  }}
                   placeholder="Enter age"
                   inputClass="bg-slate-800 text-slate-100 dark:bg-slate-800 dark:text-white focus:ring-indigo-500"
                 />

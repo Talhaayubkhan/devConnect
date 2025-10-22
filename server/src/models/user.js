@@ -35,12 +35,7 @@ const userSchema = mongoose.Schema(
     },
     age: {
       type: Number,
-      validate(num) {
-        if (Math.abs(num)) {
-          throw new Error("Age cannot be negative");
-        }
-      },
-      min: 0,
+      min: [0, "Age cannot be negative"],
     },
     gender: {
       type: String,

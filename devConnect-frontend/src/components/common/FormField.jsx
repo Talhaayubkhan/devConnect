@@ -4,10 +4,12 @@ export const FormField = ({
   value,
   onChange,
   placeholder,
+  min, // ✅ added
 }) => {
   return (
     <div className="flex flex-col">
       <label className="label-text text-slate-400 text-sm mb-1">{label}</label>
+
       {type === "textarea" ? (
         <textarea
           value={value}
@@ -22,7 +24,8 @@ export const FormField = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="input input-bordered w-full bg-base-200 text-white focus:ring-2 focus:ring-indigo-500 transition-all"
+          min={min}
+          className={`input input-bordered w-full bg-base-200 text-white focus:ring-2 focus:ring-indigo-500 transition-all`}
         />
       )}
     </div>
