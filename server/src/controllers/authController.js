@@ -54,6 +54,9 @@ const loginUser = async (req, res) => {
     const token = await user.getJWTAuthToken();
     res.cookie("token", token, {
       maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: true, // required on HTTPS (Render + Netlify use HTTPS)
+      sameSite: "None", // allow cross-site cookie
     });
 
     return res.status(200).json({ message: "Login successful", data: user });
