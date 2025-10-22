@@ -29,12 +29,10 @@ import { useConnectionStatus } from "./hooks/useConnectionStatus";
 
 function App() {
   const dispatch = useDispatch();
-  const isOnline = useConnectionStatus(); // ✅ true → online, false → offline
+  const isOnline = useConnectionStatus(); // true → online, false → offline
   const prevStatus = useRef(isOnline); // stores the previous connection state
 
-  /** ------------------------------
-   * 🔹 Load user from localStorage on app start
-   * ------------------------------ */
+  //  Load user from localStorage on app start
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -42,12 +40,9 @@ function App() {
     }
   }, [dispatch]);
 
-  /** ------------------------------
-   *  Handle Connection Status Changes
-   * ------------------------------
-   * - Compare current state (isOnline) with previous state (prevStatus.current)
-   * - Only trigger toast messages when actual change occurs
-   * ------------------------------ */
+  //  *  Handle Connection Status Changes
+  //  * - Compare current state (isOnline) with previous state (prevStatus.current)
+  //  * - Only trigger toast messages when actual change occurs
   useEffect(() => {
     // If no change (same status as before), do nothing
     if (prevStatus.current === isOnline) return;
@@ -78,16 +73,14 @@ function App() {
       <Routes>
         {/* 🔒 Protected Routes */}
         <Route element={<ProtectedRoute />}>
-          <Route element={<MainLayout />}>
-            <Route path="/feed" element={<Feed />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/connections" element={<Connections />} />
-            <Route path="/requests" element={<Requests />} />
+          <Route path="/" element={<MainLayout />}>
+            <Route path="feed" element={<Feed />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="connections" element={<Connections />} />
+            <Route path="requests" element={<Requests />} />
           </Route>
+          <Route path="*" element={<Error />} />
         </Route>
-
-        {/* ❌ Error Page for Invalid Routes */}
-        <Route path="*" element={<Error />} />
 
         {/* 🔐 Authentication Routes */}
         <Route element={<AuthLayout />}>
