@@ -35,7 +35,10 @@ const EditProfile = ({ user }) => {
           transition={{ duration: 0.4 }}
           className="flex-1 flex justify-center"
         >
-          <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 rounded-2xl shadow-2xl w-full max-w-md p-6 border border-slate-700/30 backdrop-blur-md">
+          <div
+            data-theme="dark"
+            className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 rounded-2xl shadow-2xl w-full max-w-md p-6 border border-slate-700/30 backdrop-blur-md"
+          >
             {/* Header */}
             <div className="flex items-center justify-center mb-6">
               <FaUserEdit className="text-2xl text-indigo-400 mr-2" />
@@ -73,12 +76,14 @@ const EditProfile = ({ user }) => {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Enter first name"
+                  inputClass="bg-slate-800 text-slate-100 dark:bg-slate-800 dark:text-white focus:ring-indigo-500"
                 />
                 <FormField
                   label="Last Name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Enter last name"
+                  inputClass="bg-slate-800 text-slate-100 dark:bg-slate-800 dark:text-white focus:ring-indigo-500"
                 />
               </div>
 
@@ -90,18 +95,24 @@ const EditProfile = ({ user }) => {
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
                   placeholder="Enter age"
+                  inputClass="bg-slate-800 text-slate-100 dark:bg-slate-800 dark:text-white focus:ring-indigo-500"
                 />
+
                 <div>
-                  <label className="label-text text-slate-400 text-sm mb-1 block">
+                  <label className="text-slate-300 text-sm mb-1 block">
                     Gender
                   </label>
                   <select
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
-                    className="select select-bordered w-full bg-base-200 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                    className="select select-bordered w-full bg-slate-800 text-slate-100 dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500 transition-all"
                   >
                     {SUPPORTED_GENDER.map((g) => (
-                      <option key={g.value} value={g.value}>
+                      <option
+                        key={g.value}
+                        value={g.value}
+                        className="text-slate-900 dark:text-white bg-white dark:bg-slate-800"
+                      >
                         {g.label}
                       </option>
                     ))}
@@ -114,6 +125,7 @@ const EditProfile = ({ user }) => {
                 value={photoURL}
                 onChange={(e) => setPhotoURL(e.target.value)}
                 placeholder="Enter image URL"
+                inputClass="bg-slate-800 text-slate-100 dark:bg-slate-800 dark:text-white focus:ring-indigo-500"
               />
 
               <FormField
@@ -123,6 +135,7 @@ const EditProfile = ({ user }) => {
                   setSkills(e.target.value.split(",").map((s) => s.trim()))
                 }
                 placeholder="e.g. React, Node, MongoDB"
+                inputClass="bg-slate-800 text-slate-100 dark:bg-slate-800 dark:text-white focus:ring-indigo-500"
               />
 
               <FormField
@@ -131,6 +144,7 @@ const EditProfile = ({ user }) => {
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
                 placeholder="Write something about yourself..."
+                inputClass="bg-slate-800 text-slate-100 dark:bg-slate-800 dark:text-white focus:ring-indigo-500"
               />
 
               {/* Buttons */}
@@ -160,7 +174,7 @@ const EditProfile = ({ user }) => {
         <div className="flex justify-center flex-1">
           <AnimatePresence mode="wait">
             <motion.div
-              key="user-card-preview" // ✅ Stable key so it won't remount on each input change
+              key="user-card-preview"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}

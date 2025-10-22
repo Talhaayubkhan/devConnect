@@ -26,23 +26,32 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar bg-base-200/70 backdrop-blur-md shadow-md border-b border-slate-700/30 px-4 sticky top-0 z-[100] transition-colors duration-300">
+    <nav
+      className={`
+        navbar sticky top-0 z-[100] px-4 border-b shadow-md backdrop-blur-md transition-all duration-300
+        bg-white/70 text-slate-800 border-slate-300/40
+        dark:bg-slate-900/80 dark:text-slate-100 dark:border-slate-700/40
+      `}
+    >
       {/* Left Section */}
       <div className="flex-1">
         <Link
           to="/feed"
-          className="text-2xl font-bold text-white hover:text-indigo-400 transition-colors"
+          className="text-2xl font-bold hover:text-indigo-500 transition-colors"
         >
-          DevConnect <span className="text-indigo-400">🧑‍💻</span>
+          <span className="text-indigo-500">Dev</span>
+          Connect <span className="text-indigo-400">🧑‍💻</span>
         </Link>
       </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-3 sm:gap-4">
         {user?.firstName && (
-          <p className="hidden sm:block text-sm text-slate-300">
+          <p className="hidden sm:block text-sm text-slate-600 dark:text-slate-300">
             Welcome,{" "}
-            <span className="font-semibold text-white">{user.firstName}</span>
+            <span className="font-semibold text-slate-900 dark:text-white">
+              {user.firstName}
+            </span>
           </p>
         )}
 
@@ -52,7 +61,7 @@ const Navbar = () => {
             onClick={() => setOpen((prev) => !prev)}
             className="btn btn-ghost btn-circle avatar hover:scale-105 transition-transform duration-200"
           >
-            <div className="w-10 rounded-full overflow-hidden border border-slate-600">
+            <div className="w-10 rounded-full overflow-hidden border border-slate-400 dark:border-slate-600">
               {user?.photoURL ? (
                 <img
                   src={user.photoURL}
@@ -60,7 +69,10 @@ const Navbar = () => {
                   className="object-cover w-full h-full"
                 />
               ) : (
-                <User className="text-slate-300 mx-auto mt-2" size={26} />
+                <User
+                  className="text-slate-700 dark:text-slate-300 mx-auto mt-2"
+                  size={26}
+                />
               )}
             </div>
           </button>
@@ -72,13 +84,17 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="absolute right-0 mt-3 w-56 bg-base-100 rounded-xl p-2 shadow-xl border border-slate-700/20 z-[200]"
+                className={`
+                  absolute right-0 mt-3 w-56 rounded-xl p-2 z-[200] shadow-xl border transition-all
+                  bg-white text-slate-800 border-slate-200
+                  dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700
+                `}
               >
                 <li>
                   <Link
                     to="/profile"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2 hover:bg-base-200 rounded-lg px-3 py-2"
+                    className="flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg px-3 py-2"
                   >
                     <User size={18} />
                     <span>Profile</span>
@@ -88,7 +104,7 @@ const Navbar = () => {
                   <Link
                     to="/connections"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2 hover:bg-base-200 rounded-lg px-3 py-2"
+                    className="flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg px-3 py-2"
                   >
                     <Users size={18} />
                     <span>Connections</span>
@@ -98,7 +114,7 @@ const Navbar = () => {
                   <Link
                     to="/requests"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2 hover:bg-base-200 rounded-lg px-3 py-2"
+                    className="flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg px-3 py-2"
                   >
                     <Bell size={18} />
                     <span>Requests</span>
@@ -110,7 +126,7 @@ const Navbar = () => {
                       setOpen(false);
                       handleLogout();
                     }}
-                    className="flex items-center gap-2 text-red-500 hover:bg-red-500/10 rounded-lg px-3 py-2 font-semibold"
+                    className="flex items-center gap-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/10 rounded-lg px-3 py-2 font-semibold"
                   >
                     <LogOut size={18} />
                     <span>Logout</span>
