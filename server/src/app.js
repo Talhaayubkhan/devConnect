@@ -1,33 +1,24 @@
-// Import core dependencies
+// Core Dependencies
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const { PORT, CORS_CONFIG } = require("./utils/config");
 
-// Initialize Express app
+// Initialize Express App
 const app = express();
-
-// Import database connection
+// Database Connection
 const connectDB = require("./db/database");
 
-// Middleware configuration
+// Middlewares
 app.use(cors(CORS_CONFIG));
 app.use(express.json());
 app.use(cookieParser());
 
-// Import route modules
-const authRouter = require("./routes/authRouter");
-const profileRouter = require("./routes/profileRouter");
-const requestRouter = require("./routes/requestRouter");
-const userRouter = require("./routes/userRouter");
+// Routes
+const routes = require("./routes");
+app.use("/", routes);
 
-// Route handling
-app.use("/", authRouter);
-app.use("/", profileRouter);
-app.use("/", requestRouter);
-app.use("/", userRouter);
-
-// Connect to DB and start server
+// Server + Database
 connectDB()
   .then(() => {
     console.log("✅ Database connected successfully");
