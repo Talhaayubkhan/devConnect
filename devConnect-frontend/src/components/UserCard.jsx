@@ -20,7 +20,7 @@ const UserCard = ({ user, variant = "feed", editable = false }) => {
       className="flex justify-center items-center w-full px-4 py-6"
     >
       <div
-        className={`relative w-full max-w-sm rounded-3xl border border-slate-700/40 shadow-lg overflow-hidden 
+        className={`relative w-full max-w-sm rounded-2xl border border-slate-700/40 shadow-lg overflow-hidden 
         backdrop-blur-lg transition-all duration-300
         ${
           variant === "feed"
@@ -36,7 +36,7 @@ const UserCard = ({ user, variant = "feed", editable = false }) => {
               "https://cdn-icons-png.flaticon.com/512/149/149071.png"
             }
             alt={`${firstName || "User"} ${lastName || ""}`}
-            className="w-full h-80 object-cover object-center"
+            className="w-full h-72 object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent"></div>
 

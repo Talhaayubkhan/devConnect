@@ -24,15 +24,17 @@ import "react-toastify/dist/ReactToastify.css";
 // Redux
 import { addUser } from "./redux-toolkit/slices/userSlice";
 
-// Custom Hook
+// Custom Hook (Tracks online/offline status)
 import { useConnectionStatus } from "./hooks/useConnectionStatus";
 
 function App() {
   const dispatch = useDispatch();
-  const isOnline = useConnectionStatus();
-  const isFirstRun = useRef(true);
+  const isOnline = useConnectionStatus(); // ✅ true → online, false → offline
+  const prevStatus = useRef(isOnline); // stores the previous connection state
 
-  // user from localStorage
+  /** ------------------------------
+   * 🔹 Load user from localStorage on app start
+   * ------------------------------ */
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -40,19 +42,28 @@ function App() {
     }
   }, [dispatch]);
 
-  //  Connection status handling
+  /** ------------------------------
+   *  Handle Connection Status Changes
+   * ------------------------------
+   * - Compare current state (isOnline) with previous state (prevStatus.current)
+   * - Only trigger toast messages when actual change occurs
+   * ------------------------------ */
   useEffect(() => {
-    // Prevent showing toast on the first render
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
+    // If no change (same status as before), do nothing
+    if (prevStatus.current === isOnline) return;
+
+    // If user comes back online
+    if (!prevStatus.current && isOnline) {
+      toast.success("✅ You're back online!", { autoClose: 1500 });
+    }
+    // If user goes offline
+    else if (prevStatus.current && !isOnline) {
+      toast.error("⚠️ You are offline. Check your internet connection.", {
+        autoClose: 2000,
+      });
     }
 
-    if (isOnline) {
-      toast.success("✅ You're back online!");
-    } else {
-      toast.error("⚠️ You are offline. Check your internet connection.");
-    }
+    prevStatus.current = isOnline;
   }, [isOnline]);
 
   return (
@@ -60,7 +71,7 @@ function App() {
       {/* 🔔 Top Offline Banner */}
       {!isOnline && (
         <div className="bg-red-600 text-white text-sm text-center py-2 fixed top-0 left-0 w-full z-50 shadow-md">
-          You’re offline. Some features may not work.
+          ⚠️ You’re offline. Some features may not work.
         </div>
       )}
 
@@ -73,10 +84,12 @@ function App() {
             <Route path="/connections" element={<Connections />} />
             <Route path="/requests" element={<Requests />} />
           </Route>
-          <Route path="*" element={<Error />} />
         </Route>
 
-        {/* 🔐 Auth Routes */}
+        {/* ❌ Error Page for Invalid Routes */}
+        <Route path="*" element={<Error />} />
+
+        {/* 🔐 Authentication Routes */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
         </Route>

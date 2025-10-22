@@ -52,7 +52,7 @@ const AuthForm = () => {
       try {
         setIsLoading(true);
         const endpoint = isLoginForm ? "/login" : "/signup";
-        const res = await api.post(`${endpoint}`, values);
+        const res = await api.post(endpoint, values);
 
         toast.success(
           isLoginForm ? "Login successful!" : "Signup successful! Welcome 🎉"
