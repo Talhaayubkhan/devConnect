@@ -9,7 +9,9 @@ const Feed = () => {
   if (feed.length <= 0) {
     return (
       <div className="flex-grow flex items-center justify-center bg-gradient-to-b from-slate-800 to-slate-900 text-center">
-        <h1 className="text-4xl font-bold text-red-500">No users found.</h1>
+        <h1 className="text-4xl font-bold mt-45 text-red-500">
+          No users found.
+        </h1>
       </div>
     );
   }
