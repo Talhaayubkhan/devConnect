@@ -1,15 +1,15 @@
-// src/routes/ProtectedRoutes.jsx
+import { lazy } from "react";
 import { Route } from "react-router-dom";
 import ProtectedRoute from "../layouts/ProtectedRoute";
 import MainLayout from "../layouts/MainLayout";
 
 // Pages
-import Feed from "../pages/Feed";
-import Profile from "../pages/Profile";
+const Feed = lazy(() => import("../pages/Feed"));
+const Profile = lazy(() => import("../pages/Profile"));
 
 // Components
-import Connections from "../components/Connections";
-import Requests from "../components/Requests";
+const Connections = lazy(() => import("../components/Connections"));
+const Requests = lazy(() => import("../components/Requests"));
 
 export const ProtectedRoutes = (
   <Route element={<ProtectedRoute />}>
