@@ -17,5 +17,4 @@ module.exports = {
   PORT,
   MONGODB_URI,
   CORS_CONFIG,
-  FRONTEND_URL,
 };
