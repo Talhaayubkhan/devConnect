@@ -175,7 +175,7 @@ const EditProfile = ({ user }) => {
         </motion.div>
 
         {/* 👤 Right: Animated Live Preview */}
-        <div className="flex justify-center flex-1">
+        <div className="flex justify-center flex-0.5 mt-25">
           <AnimatePresence mode="wait">
             <motion.div
               key="user-card-preview"

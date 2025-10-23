@@ -15,7 +15,7 @@ export const useFetchConnections = () => {
       const res = await api.get("/user/connections");
       dispatch(addConnectionData(res?.data?.data || []));
     } catch (error) {
-      console.error("Error fetching connections:", error);
+      console.error("Error fetching connections:", error?.message);
       toast.error("Failed to load connections. Please try again later.");
     } finally {
       setLoading(false);

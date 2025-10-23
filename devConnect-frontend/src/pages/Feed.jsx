@@ -21,7 +21,7 @@ const Feed = () => {
       <span className="loading loading-spinner loading-lg text-indigo-400 mt-30 "></span>
     </div>
   ) : (
-    <div className="flex-grow bg-gradient-to-b from-slate-800 to-slate-900 py-4">
+    <div className="flex-grow bg-gradient-to-b from-slate-800 to-slate-900">
       <div className="flex flex-col items-center gap-10">
         <UserCard user={feed[0]} />
       </div>

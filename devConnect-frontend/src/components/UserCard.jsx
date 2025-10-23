@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useSendConnectionRequest } from "../hooks/useSendConnectionRequest";
-import { User, Code, Info, Heart, X } from "lucide-react";
+import { User, Code, Heart, X } from "lucide-react";
 
 const UserCard = ({ user, variant = "feed", editable = false }) => {
   const { handleSendRequest, loadingIgnore, loadingInterested } =
@@ -17,7 +17,7 @@ const UserCard = ({ user, variant = "feed", editable = false }) => {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       whileHover={{ scale: 1 }}
-      className="flex justify-center items-center w-full px-4 py-6"
+      className="flex justify-center items-center w-full px-2 py-3"
     >
       <div
         className={`relative w-full max-w-sm rounded-2xl border border-slate-700/40 shadow-lg overflow-hidden 
@@ -36,18 +36,18 @@ const UserCard = ({ user, variant = "feed", editable = false }) => {
               "https://cdn-icons-png.flaticon.com/512/149/149071.png"
             }
             alt={`${firstName || "User"} ${lastName || ""}`}
-            className="w-full h-72 object-cover object-center"
+            className="w-full h-76 object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-900/35 to-transparent"></div>
 
           {/* 🧠 User Info Overlay */}
-          <div className="absolute bottom-4 left-4 text-white">
-            <h2 className="text-2xl font-bold tracking-wide flex items-center gap-2">
+          <div className="absolute bottom-5 left-5 text-white">
+            <h2 className="text-xl font-bold tracking-wide flex items-center gap-2">
               <User className="w-5 h-5 text-indigo-400" />
               {firstName || "Unnamed"} {lastName || ""}
             </h2>
             {(age || gender) && (
-              <p className="text-slate-300 text-sm mt-1">
+              <p className="text-slate-400 text-sm mt-1">
                 {age && `${age} yrs`}
                 {age && gender && " • "}
                 {gender && gender.charAt(0).toUpperCase() + gender.slice(1)}
@@ -83,7 +83,7 @@ const UserCard = ({ user, variant = "feed", editable = false }) => {
             <div className="flex justify-center gap-6">
               {/* ❌ Ignore */}
               <motion.button
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 1 }}
                 onClick={() => handleSendRequest("ignored", _id)}
                 disabled={loadingIgnore || loadingInterested}
                 className="btn bg-gradient-to-r from-rose-600 to-rose-700 border-none text-white shadow-md hover:shadow-rose-500/40 hover:scale-105"
