@@ -1,17 +1,18 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Twitter, Youtube, Facebook, Code2, Github } from "lucide-react";
 
 const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-base-200/70 backdrop-blur-md border-t border-slate-700/30 shadow-inner text-slate-300 py-6 px-6 w-full mt-auto">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Left Section */}
+    <footer className="bg-base-200/70 backdrop-blur-md border-t border-slate-700/30 shadow-inner text-slate-300 py-8 px-6 mt-auto">
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
+        {/* Left Section — Brand */}
         <motion.div
-          initial={{ opacity: 0, y: 5 }}
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.4 }}
           className="flex items-center gap-2"
         >
           <Code2 className="text-indigo-400" size={22} />
@@ -24,11 +25,22 @@ const Footer = () => {
           </p>
         </motion.div>
 
-        {/* Right Section (Social Links) */}
+        {/* Center Section — Legal Links */}
         <motion.div
-          initial={{ opacity: 0, y: 5 }}
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex items-center gap-6 text-sm"
+        >
+          <FooterLink to="/terms-of-use" label="Terms of Use" />
+          <FooterLink to="/privacy-policy" label="Privacy Policy" />
+        </motion.div>
+
+        {/* Right Section — Social Links */}
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
           className="flex items-center gap-5 text-slate-400 text-xl"
         >
           <SocialIcon
@@ -53,7 +65,16 @@ const Footer = () => {
   );
 };
 
-/* --- Reusable Social Icon Component --- */
+/* --- Reusable Components --- */
+const FooterLink = ({ to, label }) => (
+  <Link
+    to={to}
+    className="text-slate-400 hover:text-indigo-400 transition-colors duration-200"
+  >
+    {label}
+  </Link>
+);
+
 const SocialIcon = ({ href, icon, hover }) => (
   <motion.a
     href={href}
