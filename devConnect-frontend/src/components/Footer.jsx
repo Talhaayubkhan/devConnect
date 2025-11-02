@@ -1,22 +1,23 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Twitter, Youtube, Facebook, Code2, Github } from "lucide-react";
+import { FooterLink } from "./common/FooterLink";
+import { SocialIcon } from "./common/SocialIcon";
 
 const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-base-200/70 backdrop-blur-md border-t border-slate-700/30 shadow-inner text-slate-300 py-8 px-6 mt-auto">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
-        {/* Left Section — Brand */}
+    <footer className="bg-gray-900 text-gray-400 border-t border-gray-800 py-6 px-4 mt-auto">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+        {/* Left Section — Branding */}
         <motion.div
-          initial={{ opacity: 0, y: 6 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           className="flex items-center gap-2"
         >
           <Code2 className="text-indigo-400" size={22} />
-          <p className="text-sm">
+          <p>
             © {year}{" "}
             <span className="font-semibold text-white tracking-wide">
               DevConnect
@@ -27,63 +28,43 @@ const Footer = () => {
 
         {/* Center Section — Legal Links */}
         <motion.div
-          initial={{ opacity: 0, y: 6 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex items-center gap-6 text-sm"
+          className="flex gap-5 text-sm"
         >
-          <FooterLink to="/terms-of-use" label="Terms of Use" />
           <FooterLink to="/privacy-policy" label="Privacy Policy" />
+          <span className="text-gray-600">|</span>
+          <FooterLink to="/terms-of-use" label="Terms of Use" />
         </motion.div>
 
-        {/* Right Section — Social Links */}
+        {/* Right Section — Social Icons */}
         <motion.div
-          initial={{ opacity: 0, y: 6 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.15 }}
-          className="flex items-center gap-5 text-slate-400 text-xl"
+          className="flex items-center gap-4"
         >
           <SocialIcon
             href="#"
-            icon={<Twitter size={20} />}
+            icon={<Twitter size={18} />}
             hover="text-sky-400"
           />
           <SocialIcon
             href="#"
-            icon={<Youtube size={20} />}
+            icon={<Youtube size={18} />}
             hover="text-red-500"
           />
           <SocialIcon
             href="#"
-            icon={<Facebook size={20} />}
+            icon={<Facebook size={18} />}
             hover="text-blue-500"
           />
-          <SocialIcon href="#" icon={<Github size={20} />} hover="text-white" />
+          <SocialIcon href="#" icon={<Github size={18} />} hover="text-white" />
         </motion.div>
       </div>
     </footer>
   );
 };
-
-/* --- Reusable Components --- */
-const FooterLink = ({ to, label }) => (
-  <Link
-    to={to}
-    className="text-slate-400 hover:text-indigo-400 transition-colors duration-200"
-  >
-    {label}
-  </Link>
-);
-
-const SocialIcon = ({ href, icon, hover }) => (
-  <motion.a
-    href={href}
-    whileHover={{ scale: 1.15 }}
-    whileTap={{ scale: 0.9 }}
-    className={`transition-colors duration-200 hover:${hover}`}
-  >
-    {icon}
-  </motion.a>
-);
 
 export default Footer;

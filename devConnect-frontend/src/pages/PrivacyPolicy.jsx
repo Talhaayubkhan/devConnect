@@ -1,6 +1,6 @@
-// src/pages/PrivacyPolicy.jsx
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const PrivacyPolicy = () => {
   return (
@@ -22,26 +22,29 @@ const PrivacyPolicy = () => {
       <p className="mb-4">
         At <span className="font-semibold text-indigo-400">DevConnect</span>, we
         value your privacy and are committed to protecting your personal
-        information. This policy explains how we collect, use, and safeguard
-        your data when you interact with our platform.
+        information. This Privacy Policy explains how we collect, use, and
+        safeguard your data when you interact with our platform.
       </p>
 
       <h2 className="text-xl text-white font-semibold mt-8 mb-3">
         Information We Collect
       </h2>
-      <ul className="list-disc list-inside mb-4">
-        <li>Personal details (name, email, etc.) when you register.</li>
-        <li>Usage data to improve performance and user experience.</li>
-        <li>Payment information securely processed via PayFast.</li>
+      <ul className="list-disc list-inside mb-4 space-y-1">
+        <li>Basic details such as name and email when you register.</li>
+        <li>Usage data to analyze performance and enhance user experience.</li>
+        <li>
+          Payment details securely processed through PayFast’s sandbox
+          environment.
+        </li>
       </ul>
 
       <h2 className="text-xl text-white font-semibold mt-8 mb-3">
         How We Use Your Information
       </h2>
       <p className="mb-4">
-        We use your data to provide a seamless experience, process secure
-        payments, and enhance the functionality of our platform. We never sell
-        or share your personal data with third parties for marketing purposes.
+        We use your data to provide a seamless and secure experience, process
+        payments safely, and continually improve our platform. We do not sell or
+        share your personal data with third parties for marketing purposes.
       </p>
 
       <h2 className="text-xl text-white font-semibold mt-8 mb-3">
@@ -57,20 +60,36 @@ const PrivacyPolicy = () => {
         >
           PayFast
         </a>{" "}
-        as our secure payment processor. Payment details are transmitted
-        directly to PayFast using encrypted connections. We do not store credit
-        card information on our servers.
+        as our secure payment processor. All payment information is encrypted
+        and transmitted directly to PayFast. We do not store card details on our
+        servers.
       </p>
 
       <h2 className="text-xl text-white font-semibold mt-8 mb-3">
         Your Consent
       </h2>
       <p className="mb-4">
-        By using DevConnect, you agree to this privacy policy. We may update it
-        periodically, and changes will be reflected on this page.
+        By using DevConnect, you agree to this Privacy Policy. We may update
+        this policy from time to time, and any changes will be reflected on this
+        page with an updated revision date.
       </p>
 
-      <p className="mt-10 text-center text-slate-400 text-sm">
+      {/* 🔙 Back Button */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="text-center mt-10"
+      >
+        <Link
+          to="/feed"
+          className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow-md transition-all duration-300"
+        >
+          ← Back to Feed
+        </Link>
+      </motion.div>
+
+      <p className="mt-10 text-center text-slate-500 text-sm">
         Last updated: October 2025
       </p>
     </motion.section>
