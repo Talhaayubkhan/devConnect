@@ -10,6 +10,7 @@ const Profile = lazy(() => import("../pages/Profile"));
 // Components
 const Connections = lazy(() => import("../components/Connections"));
 const Requests = lazy(() => import("../components/Requests"));
+const Premium = lazy(() => import("../components/Premium"));
 
 export const ProtectedRoutes = (
   <Route element={<ProtectedRoute />}>
@@ -18,6 +19,7 @@ export const ProtectedRoutes = (
       <Route path="profile" element={<Profile />} />
       <Route path="connections" element={<Connections />} />
       <Route path="requests" element={<Requests />} />
+      <Route path="premium" element={<Premium />} />
     </Route>
   </Route>
 );

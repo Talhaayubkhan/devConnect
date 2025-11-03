@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { removeUser } from "../redux-toolkit/slices/userSlice";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, LogOut, Users, Bell } from "lucide-react";
+import { User, LogOut, Users, Bell, UserStar } from "lucide-react";
 import { useState } from "react";
 import api from "../api/axios";
 
@@ -118,6 +118,16 @@ const Navbar = () => {
                   >
                     <Bell size={18} />
                     <span>Requests</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/premium"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg px-3 py-2"
+                  >
+                    <UserStar size={18} />
+                    <span>Premium</span>
                   </Link>
                 </li>
                 <li>
